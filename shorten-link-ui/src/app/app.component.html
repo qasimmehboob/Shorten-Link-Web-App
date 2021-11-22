@@ -1,0 +1,90 @@
+<div class="container">
+  <p-card header="Shorten-Link Demo" styleClass="mb-3 p-0">
+    <p>URL shortening is a technique on the World Wide Web in which a Uniform Resource Locator (URL)
+      may be made substantially shorter and still direct to the required page. This is achieved by
+      using a redirect which links to the web page that has a long URL.</p>
+  </p-card>
+  <p-card styleClass="mb-3">
+    <div class="row">
+      <div class="col-sm-8 mb-3">
+        <label for="link" class="form-label"><strong>Link</strong></label>
+        <input type="text" class="form-control" id="link" [(ngModel)]="inputLink"
+          placeholder="https://example.com/assets/category_B/subcategory_C/Foo/" [disabled]="selectedLink != null">
+      </div>
+      <div class="col-sm-2 mb-3 mt-1">
+        <label for="expiryDate"><strong>Expiry Date</strong></label>
+        <p-calendar styleClass="pt-1" inputId="expiryDate" dateFormat="dd-mm-yy" [minDate]="minDate"
+          [(ngModel)]="expiryDate">
+        </p-calendar>
+      </div>
+      <div *ngIf="!selectedLink" class="col-sm-2 mt-4 mb-3">
+        <button class="btn btn-primary mt-2" (click)="createShorterLink()">Create</button>
+      </div>
+      <div *ngIf="selectedLink" class="col-sm-1 mt-4 mb-3">
+        <button class="btn btn-primary mt-2" (click)="updateShorterLink()">Update</button>
+      </div>
+      <div *ngIf="selectedLink" class="col-sm-1 mt-4 mb-3">
+        <button class="btn btn-danger mt-2" (click)="deleteShorterLink()">Delete</button>
+      </div>
+    </div>
+  </p-card>
+
+  <div class="card">
+    <p-table #dt2 dataKey="id" [value]="links" selectionMode="single" [(selection)]="selectedLink"
+      (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)" sortMode="multiple" [paginator]="true"
+      [rows]="5" [showCurrentPageReport]="true" responsiveLayout="scroll"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+      [rowsPerPageOptions]="[5,10,25,50]"
+      [globalFilterFields]="['hash','originalLink','createdDate','modifiedDate', 'expiryDate']">
+      <ng-template pTemplate="caption">
+        <div class="p-d-flex">
+          <span class="p-input-icon-right p-ml-auto">
+            <i class="pi pi-search"></i>
+            <input pInputText type="text" (input)="dt2.filterGlobal(getEventValue($event), 'contains')"
+              placeholder="Search keyword" />
+          </span>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="hash">Hash <p-sortIcon field="hash"></p-sortIcon>
+          </th>
+          <th pSortableColumn="originalLink">Orignal Link <p-sortIcon field="originalLink"></p-sortIcon>
+          </th>
+          <th pSortableColumn="createdDate">Created Date <p-sortIcon field="createdDate"></p-sortIcon>
+          </th>
+          <th pSortableColumn="modifiedDate">Modified Date <p-sortIcon field="modifiedDate"></p-sortIcon>
+          </th>
+          <th pSortableColumn="expiryDate">Expiry Date <p-sortIcon field="expiryDate"></p-sortIcon>
+        </tr>
+        <tr>
+          <th>
+            <p-columnFilter matchMode="contains" type="text" field="hash"></p-columnFilter>
+          </th>
+          <th>
+            <p-columnFilter matchMode="contains" type="text" field="originalLink"></p-columnFilter>
+          </th>
+          <th>
+            <p-columnFilter matchMode="contains" type="text" field="createdDate"></p-columnFilter>
+          </th>
+          <th>
+            <p-columnFilter matchMode="contains" type="text" field="modifiedDate"></p-columnFilter>
+          </th>
+          <th>
+            <p-columnFilter matchMode="contains" type="text" field="expiryDate"></p-columnFilter>
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-link>
+        <tr [pSelectableRow]="link">
+          <td style="width: 10rem"><a target="_blank"
+              href="{{'http://localhost:8080/api/links/' + link.hash}}">{{link.hash}}</a></td>
+          <td>{{link.originalLink}}</td>
+          <td style="width: 10rem">{{link.createdDate | date: 'MM-dd-yyyy'}}</td>
+          <td style="width: 11rem">{{link.modifiedDate | date: 'MM-dd-yyyy'}}</td>
+          <td style="width: 10rem">{{link.expiryDate | date: 'MM-dd-yyyy'}}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>

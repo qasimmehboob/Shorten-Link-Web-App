@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  server:
+    image: qasimdev/shorten-link-api
+    ports:
+      - "8080:8080"
+    restart: always
+  web:
+    image: qasimdev/shorten-link-web
+    links:
+      - "server"
+    depends_on:
+      - "server"
+    ports:
+      - "80:80"
