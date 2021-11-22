@@ -1,2 +1,2 @@
-# Shorten-Link-Web-App
+# Shorten Link Web App
 URL Shortener Application
