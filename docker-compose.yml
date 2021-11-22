@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  backendserver:
+    build: ../ShortenLink/
+    image: shorten-link-api
+    ports:
+      - "8080:8080"
+    restart: always
+  frontend:
+    build: ../shorten-link-ui/
+    image: shorten-link-web
+    links:
+      - "backendserver"
+    depends_on:
+      - "backendserver"
+    ports:
+      - "80:80"
